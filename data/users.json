@@ -1,0 +1,42 @@
+[
+  {
+    "_id": "1",
+    "email": "pendo@localhost.com",
+    "avatar": "https://avatars.dicebear.com/v2/female/eaa1940b5b56d13789677e5627f2841e.svg",
+    "password": "Odin1",
+    "gender": "F",
+    "dateCreated": "2022-06-14",
+    "hashtags": ["tomboy", "basketball"],
+    "notes": "Vestibulum eget ipsum lobortis, ultrices nulla at, egestas velit. Quisque in mi cursus, commodo lectus et, lacinia leo."
+  },
+  {
+    "_id": "2",
+    "email": "sheldon@localhost.com",
+    "avatar": "/sheldon.svg",
+    "password": "Dva2",
+    "gender": "M",
+    "dateCreated": "2022-06-14",
+    "hashtags": ["nerd", "physics"],
+    "notes": "Aliquam neque ex, viverra nec eleifend in, laoreet placerat massa. Donec vel vehicula risus, quis euismod mauris. Vestibulum in lacus pellentesque nisi accumsan convallis."
+  },
+  {
+    "_id": "3",
+    "email": "tuta@localhost.com",
+    "avatar": "https://avatars.dicebear.com/v2/female/f41c8d8962ccdafab4c60194cbfaf357.svg",
+    "password": "Tri3",
+    "gender": "F",
+    "dateCreated": "2022-06-14",
+    "hashtags": ["sudan", "melanin", "bff"],
+    "notes": "Ut scelerisque venenatis metus ut luctus. Curabitur nibh lacus, ullamcorper sit amet ornare ac, rhoncus vehicula nibh. Ut sed odio dictum, semper libero vitae, sagittis sapien."
+  },
+  {
+    "_id": "12",
+    "email": "shaleen@localhost.com",
+    "avatar": "https://avatars.dicebear.com/v2/female/47fe887fcbd3765bc3da0ab84d49fb47.svg",
+    "password": "Odin1dva2",
+    "gender": "F",
+    "dateCreated": "2022-06-14",
+    "hashtags": ["melanin"],
+    "notes": " Suspendisse sed semper risus. Etiam varius massa vitae posuere tristique. Morbi enim odio, fringilla in felis vel, vulputate pulvinar tellus."
+  }
+]

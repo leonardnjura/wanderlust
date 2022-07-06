@@ -1,8 +1,16 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import '@fortawesome/fontawesome-svg-core/styles.css';
+import type { AppProps } from 'next/app';
+import { AuthProvider } from '../context/auth/AuthContext';
+import '../styles/globals.css';
+import { NextPageWithLayout } from './page';
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+interface AppPropsWithLayout extends AppProps {
+  Component: NextPageWithLayout;
 }
 
-export default MyApp
+function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+  const getLayout = Component.getLayout || ((page) => page);
+  return <AuthProvider>{getLayout(<Component {...pageProps} />)}</AuthProvider>;
+}
+
+export default MyApp;
