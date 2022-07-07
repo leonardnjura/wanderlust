@@ -72,7 +72,7 @@ export default function handler(
     } else {
       return res
         .status(404)
-        .json({ success: false, message: `Item of id ${id} is not found` });
+        .json({ success: false, message: `Item of id ${id} not found` });
     }
   }
 
