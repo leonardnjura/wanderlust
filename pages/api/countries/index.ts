@@ -11,7 +11,9 @@ export default function handler(
   //todo: save thirdparty data in mongodb && db connect?
 
   let codes = req.query.codes as string;
-  codes = codes.replace(/\s/g, '');
+  if (codes) {
+    codes = codes.replace(/\s/g, '');
+  }
 
   switch (req.method) {
     case 'GET':
