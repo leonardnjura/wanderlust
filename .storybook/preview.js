@@ -28,9 +28,8 @@ const customViewports = Object.fromEntries(
 
 export const decorators = [
   (Story) => (
-    <AuthProvider>
-      <Story />
-    </AuthProvider>
+    // <AuthProvider> </AuthProvider>
+    <Story />
   ),
 ];
 

@@ -57,28 +57,26 @@ export const IUserDataSchema: Schema = {
 export interface ICountryData {
   name: string;
   officialName: string;
-  nativeName: string;
-  portugueseNameTranslation: string;
-  russianNameTranslation: string;
+  nativeNames: INativeName[];
   altSpellings: string[];
   iso2Code: string;
   iso3Code: string;
   numericCode: number;
   callingCode: string;
   tld: string;
-  capitals: string[];
+  capital: string;
   subregion: string;
   region: string;
   population: IPopulation;
   latlng: string[];
   capitalLatLng: string[];
-  area: string[];
+  area: number;
   googleMaps: string;
-  demonym: IDemonym;
-  gini: IGini;
+  ginis: IGini[];
+  demonyms: IDemonym[];
   timezones: string[];
   continents: string[];
-  borders: string[];
+  borders: ICountry[];
   flag: string;
   coatOfArms: string;
   currencies: ICurrency[];
@@ -89,6 +87,11 @@ export interface ICountryData {
   independent: boolean;
   landlocked: boolean;
   unMember: boolean;
+}
+
+export interface ICountry {
+  iso3Code: string;
+  commonName: string;
 }
 
 /*Others*/
@@ -125,7 +128,16 @@ export interface ILanguage {
   name: string;
 }
 
+export interface INativeName {
+  languageCode: string;
+  languageName: string;
+  officialName: string;
+  commonName: string;
+}
+
 export interface IDemonym {
+  languageCode: string;
+  languageName: string;
   m: string;
   f: string;
 }
@@ -138,7 +150,7 @@ export interface IGini {
 export interface IPopulation {
   year: number;
   total: number;
-  source: number;
+  source: string;
 }
 
 export interface IPostalCode {
