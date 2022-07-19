@@ -29,6 +29,10 @@ export default function handler(
     }
 
     if (country) {
+      // stub: enable to catch some preparation errors per iso2
+      // const preparedCountry = await prepareExternalApiCountry(country);
+      // console.log(`!!rusty country cleaned in my api:: ${preparedCountry}`);
+
       return res.status(200).json({ message: 'all fields', data: country });
     } else {
       return res.status(404).json({

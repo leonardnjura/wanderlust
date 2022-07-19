@@ -34,19 +34,20 @@ interface Params extends ParsedUrlQuery {
 }
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
-  const items: IUserData[] = await loadUsers();
+  let items: IUserData[] = [];
 
   // nugget: set fallback to 'blocking' to serve other all untraversed paths as manually requested by site users
-  // nugget: if using an undeployed local api $ yarn build fails, enable a tempfix but do a follow up deployment with all static auto-generated paths to enjoy next.js static speed
+  // nugget: deploy any needed local api routes first
 
-  // tempfix: enable to pass build [traverse just a few known live ids]
+  // quickie: traverse just a few known paths [using their live ids]
   // const paths = Array.from({ length: 3 }, (_, index) => ({
   //   params: {
   //     id: (index + 1).toString(),
   //   },
   // }));
 
-  // preferred: works always in dev [fails $ yarn build if it uses a local api that has not been deployed as cannot find ids :/]
+  // preferred: all auto-generated paths [$ yarn build fails with errors like unexpected json token, if some needed api endpoints have not been deployed]
+  items = await loadUsers();
   const ids = items.map((item: IUserData) => item._id);
   const paths = ids.map((id) => ({ params: { id: id.toString() } }));
 
@@ -56,7 +57,7 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
   };
 };
 
-const About: NextPageWithLayout<IUserProps> = ({ userDataApiResponse }) => {
+const User: NextPageWithLayout<IUserProps> = ({ userDataApiResponse }) => {
   return userDataApiResponse._id == null ? (
     <NotFound customMessage="Item not found" />
   ) : (
@@ -67,8 +68,14 @@ const About: NextPageWithLayout<IUserProps> = ({ userDataApiResponse }) => {
   );
 };
 
-export default About;
+export default User;
 
-About.getLayout = (page) => {
-  return <PrimaryLayout pageTitle="User">{page}</PrimaryLayout>;
+User.getLayout = (page) => {
+  return (
+    <PrimaryLayout
+      pageTitle={`${page.props['userDataApiResponse'].firstName ?? 'User'}`}
+    >
+      {page}
+    </PrimaryLayout>
+  );
 };

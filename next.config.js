@@ -2,7 +2,12 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['i.pravatar.cc', 'avatars.dicebear.com'],
+    domains: [
+      'i.pravatar.cc',
+      'avatars.dicebear.com',
+      'flagcdn.com',
+      'mainfacts.com',
+    ],
   },
   i18n: {
     locales: ['en', 'pt-BR'],
@@ -12,10 +17,7 @@ const nextConfig = {
 
   webpack: (config) => {
     config.resolve.fallback = { tls: false, fs: false, net: false };
-    // config.module.rules.push({
-    //   test: /\.svg$/,
-    //   use: ["@svgr/webpack"]
-    // });
+
     return config;
   },
   async rewrites() {
@@ -47,6 +49,7 @@ const nextConfig = {
       },
     ];
   },
+  staticPageGenerationTimeout: 1000,
 };
 
 module.exports = nextConfig;

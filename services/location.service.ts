@@ -1,6 +1,6 @@
 import publicIp from 'public-ip';
 import { restCountriesApi } from '../config';
-import { ICurrency, ILanguage, ILocationData } from '../data/types';
+import { ICountry, ICurrency, ILanguage, ILocationData } from '../data/types';
 
 const iplocate = require('node-iplocate');
 
@@ -67,6 +67,8 @@ export async function getRestCountriesWorldParams(param: string) {
   const thirdPartyRes = await fetch(`${restCountriesApi}/all`);
   const countries = await thirdPartyRes.json();
 
+  let countriesOfTheWorldSimple: any[] = [];
+
   let capitalsOfTheWorld: any[] = [];
   let currenciesOfTheWorld: any[] = [];
   let languagesOfTheWorld: any[] = [];
@@ -75,7 +77,7 @@ export async function getRestCountriesWorldParams(param: string) {
 
   for (let i = 0; i < countries.length; i++) {
     let country = countries[i];
-    var countryName = country['name']['official'];
+
     var capitals = country['capital'];
     if (capitals) {
       capitalsOfTheWorld = capitalsOfTheWorld.concat(capitals);
@@ -118,13 +120,16 @@ export async function getRestCountriesWorldParams(param: string) {
       subregionsOfTheWorld.push(subregion);
     }
 
-    console.log(`#${i}. ${countryName}
-    capitals: ${capitals}
-    currenciesList: ${currenciesList}
-    languagesList: ${languagesList}
-    region: ${region}
-    subregion: ${subregion}
-    \n\n`);
+    // Lets re-create countries in a simple list for easy-on-the-eye endpoint that will double to decode iso3code elsewhere ********
+    var countryNameOfficial = country['name']['official'];
+    var countryNameCommon = country['name']['common'];
+    var iso3Code = country['cca3'];
+
+    let my_simple_country_object: ICountry = {
+      iso3Code: iso3Code,
+      commonName: countryNameCommon,
+    };
+    countriesOfTheWorldSimple.push(my_simple_country_object);
   }
   capitalsOfTheWorld = Array.from(new Set(capitalsOfTheWorld));
   currenciesOfTheWorld = Array.from(new Set(currenciesOfTheWorld));
@@ -134,6 +139,9 @@ export async function getRestCountriesWorldParams(param: string) {
 
   var ans;
   switch (param) {
+    case 'countries':
+      ans = countriesOfTheWorldSimple;
+      break;
     case 'capitals':
       ans = capitalsOfTheWorld;
       break;

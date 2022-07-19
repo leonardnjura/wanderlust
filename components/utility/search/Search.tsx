@@ -58,7 +58,7 @@ const Search: React.FC<ISearch> = () => {
             <input
               autoFocus
               type="text"
-              className="rounded-full border-2 w-96 sm:w-128 h-10 px-3"
+              className="rounded-full border-2 w-80 sm:w-128 h-10 px-3"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />

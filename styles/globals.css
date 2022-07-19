@@ -7,3 +7,9 @@
     @apply border-0 p-2 px-6 bg-slate-100 hover:bg-slate-200 rounded-md;
   }
 }
+
+@layer components {
+  .yello {
+    color: yellow;
+  }
+}
