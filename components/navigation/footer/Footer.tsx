@@ -32,7 +32,7 @@ const Footer: React.FC<IFooter> = ({
   return (
     <footer
       {...footerProps}
-      className={`w-full p-5 bg-gray-900 text-slate-700 ${className}`}
+      className={`w-full p-5 bg-gray-900 dark:bg-gray-800 text-slate-700 dark:text-slate-600 ${className}`}
     >
       <div className="">
         <button onClick={() => setCount(count + 1)}>

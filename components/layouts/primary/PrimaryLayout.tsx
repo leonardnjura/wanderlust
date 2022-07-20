@@ -1,19 +1,8 @@
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
-import {
-  ICountry,
-  ICountryData,
-  ICurrency,
-  IDemonym,
-  IGini,
-  ILanguage,
-  ILocationData,
-  INativeName,
-} from '../../../data/types';
+import { ICountryData, ILocationData } from '../../../data/types';
 import {
   loadOneCountry,
-  loadWorldCountries,
-  loadWorldLanguages,
   prepareExternalApiCountry,
 } from '../../../lib/get-countries';
 import { getPublicIpData } from '../../../services/location.service';
@@ -23,13 +12,13 @@ import Header from '../../navigation/header/Header';
 export interface IPrimaryLayout {
   children: React.ReactNode;
   justify?: 'items-start' | 'items-center' | 'items-end';
-  pageTitle: string;
+  titleBar: string;
 }
 
 const PrimaryLayout: React.FC<IPrimaryLayout> = ({
   children,
   justify = 'items-center',
-  pageTitle,
+  titleBar: pageTitle,
 }) => {
   const defaultLocationData: ILocationData = {} as ILocationData;
   defaultLocationData.country = 'Loading Region..';
@@ -63,7 +52,9 @@ const PrimaryLayout: React.FC<IPrimaryLayout> = ({
       <Head>
         <title>{pageTitle} | Wanderlust</title>
       </Head>
-      <div className={`min-h-screen flex flex-col ${justify}`}>
+      <div
+        className={`min-h-screen flex flex-col ${justify}  dark:bg-gray-900 dark:text-white`}
+      >
         <Header />
         <main className="px-5">{children}</main>
         <div className="m-auto" />

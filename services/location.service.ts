@@ -1,5 +1,6 @@
 import publicIp from 'public-ip';
-import { restCountriesApi } from '../config';
+import { loadFallbackData, restCountriesApi } from '../config';
+import defaultCountriesRaw from '../data/search-database-raw.json';
 import { ICountry, ICurrency, ILanguage, ILocationData } from '../data/types';
 
 const iplocate = require('node-iplocate');
@@ -37,8 +38,13 @@ export async function detectUserIp(req?: any) {
         ? await publicIp.v4()
         : detectedIp;
   } else {
-    const res = await fetch('https://geolocation-db.com/json/');
-    return (await res.json()).IPv4;
+    try {
+      const res = await fetch('https://geolocation-db.com/json/');
+      return (await res.json()).IPv4;
+    } catch (e) {
+      console.log(`!!Ayayai, detect ip failed:: ${e}`);
+      return null;
+    }
   }
 
   return detectedIp;
@@ -47,16 +53,28 @@ export async function detectUserIp(req?: any) {
 export async function getPublicIpData(inputIp?: string) {
   const ip = inputIp != null ? inputIp : await detectUserIp();
 
-  const rawInfo: ILocationPkgRaw = await iplocate(ip);
+  //ip could be null if detection fails eg in onion or you are offline and refreshing the page
 
-  const cleanedInfo: ILocationData = {
-    ip: rawInfo.ip,
-    country: rawInfo.country,
-    iso2: rawInfo.country_code?.toLowerCase(),
-    city: rawInfo.city,
-    timezone: rawInfo.time_zone?.toLowerCase(),
-    continent: rawInfo.continent,
+  let cleanedInfo: ILocationData = {
+    ip: '0.0.0.0',
+    country: 'Default',
+    iso2: '__',
+    city: 'Default City_',
+    timezone: '_',
+    continent: 'Default Continent',
   };
+
+  if (ip != null) {
+    const rawInfo: ILocationPkgRaw = await iplocate(ip);
+    cleanedInfo = {
+      ip: rawInfo.ip,
+      country: rawInfo.country,
+      iso2: rawInfo.country_code?.toLowerCase(),
+      city: rawInfo.city,
+      timezone: rawInfo.time_zone?.toLowerCase(),
+      continent: rawInfo.continent,
+    };
+  }
 
   // console.log('!!raw ipinfo:: ' + JSON.stringify(rawInfo, null, 2));
 
@@ -64,8 +82,20 @@ export async function getPublicIpData(inputIp?: string) {
 }
 
 export async function getRestCountriesWorldParams(param: string) {
-  const thirdPartyRes = await fetch(`${restCountriesApi}/all`);
-  const countries = await thirdPartyRes.json();
+  let countries;
+
+  try {
+    const thirdPartyRes = await fetch(`${restCountriesApi}/all`);
+    if (thirdPartyRes.status == 200) {
+      countries = await thirdPartyRes.json();
+    }
+  } catch (e) {
+    console.log(`Ayayai on fetching all countries [in world params]::${e}`);
+
+    if (loadFallbackData) {
+      countries = defaultCountriesRaw;
+    }
+  }
 
   let countriesOfTheWorldSimple: any[] = [];
 
@@ -124,10 +154,12 @@ export async function getRestCountriesWorldParams(param: string) {
     var countryNameOfficial = country['name']['official'];
     var countryNameCommon = country['name']['common'];
     var iso3Code = country['cca3'];
+    var iso2Code = country['cca2'];
 
     let my_simple_country_object: ICountry = {
-      iso3Code: iso3Code,
       commonName: countryNameCommon,
+      iso3Code: iso3Code,
+      iso2Code: iso2Code,
     };
     countriesOfTheWorldSimple.push(my_simple_country_object);
   }

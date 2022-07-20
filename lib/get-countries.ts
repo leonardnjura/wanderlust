@@ -8,6 +8,7 @@ import {
   IGini,
   ILanguage,
   INativeName,
+  IPostalCode,
 } from '../data/types';
 import { isEmpty } from '../utils/preops';
 
@@ -33,12 +34,27 @@ export async function loadOneCountry(id: string, excludeFields?: string[]) {
   return data;
 }
 
+export async function loadOneCountryClean(
+  id: string,
+  excludeFields?: string[]
+) {
+  /**Set exclude list to strip off some nasty or sensitive fields
+   * Returns a cleaner endpoint following local object
+   */
+  const res = await fetch(`${server}/api/countries/${id}?clean=true`);
+  let data = (await res.json())['data'];
+
+  if (excludeFields != null) {
+    data = JSON.parse(stripFields(data, excludeFields));
+  }
+  return data;
+}
+
 export async function loadPassedCountries(
   commaSeparatedStr: string,
   excludeFields?: string[]
 ) {
   /**Set exclude list to strip off some nasty or sensitive fields
-   * Api does cleaning of params, don't repeat here.
    */
   const res = await fetch(`${server}/api/countries?codes=${commaSeparatedStr}`);
   let data = (await res.json())['data'];
@@ -204,11 +220,20 @@ export async function loadWorldSubregions(excludeFields?: string[]) {
 
 //**Prepare */
 
-export async function prepareExternalApiCountry(rawCountry: any) {
-  // returns a locally-compliant object
+export async function prepareExternalApiCountry(
+  rawCountry: any,
+  maNchi?: ICountry[],
+  maLugha?: ILanguage[]
+) {
+  /// returns a locally-compliant object
+
   //^^^^^^^^^^^helpers^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  const worldLanguages: ILanguage[] = await loadWorldLanguages();
-  const worldCountries: ICountry[] = await loadWorldCountries();
+  const worldCountries: ICountry[] = maNchi
+    ? maNchi
+    : await loadWorldCountries();
+  const worldLanguages: ILanguage[] = maLugha
+    ? maLugha
+    : await loadWorldLanguages();
   //^^^^^^^^^^^helpers^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   if (rawCountry == null) {
@@ -216,8 +241,25 @@ export async function prepareExternalApiCountry(rawCountry: any) {
   }
 
   let countryData: ICountryData = {} as ICountryData;
-  countryData.name = rawCountry.name.common;
-  countryData.officialName = rawCountry.name.official;
+  countryData.name = rawCountry.name?.common;
+  countryData.officialName = rawCountry.name?.official;
+
+  //better set these defaults for missing fields^^^^^^^^^^^^
+  countryData.capital = null;
+  countryData.region = null;
+  countryData.subregion = null;
+  countryData.callingCode = null;
+  countryData.drivingSide = null;
+  countryData.numericCode = null;
+  countryData.tld = null;
+
+  countryData.independent = false;
+  countryData.landlocked = false;
+  countryData.unMember = false;
+  countryData.postalCode = {} as IPostalCode;
+  countryData.coatOfArms = '';
+  countryData.capitalLatLng = [];
+  //better set these defaults for missing fields^^^^^^^^^^^^
 
   var nativeNames = rawCountry.name.nativeName; //obj list
   var nativeNameList: INativeName[] = [];
@@ -317,7 +359,7 @@ export async function prepareExternalApiCountry(rawCountry: any) {
     countryData.iso3Code = rawCountry.cca3;
   }
   if (rawCountry.ccn3) {
-    countryData.numericCode = rawCountry.ccn3;
+    countryData.numericCode = parseInt(rawCountry.ccn3);
   }
   if (rawCountry.idd && !isEmpty(rawCountry.idd)) {
     countryData.callingCode = rawCountry.idd.root + rawCountry.idd.suffixes[0];
@@ -499,4 +541,25 @@ export async function prepareExternalApiCountry(rawCountry: any) {
   //console.log(`!!country stringified:: ${JSON.stringify(countryData)}`);
 
   return countryData;
+}
+export async function prepareExternalApiCountrySimple(rawCountry: any) {
+  // returns a locally-compliant object - simple with just country name and an iso code
+
+  if (rawCountry == null) {
+    return;
+  }
+
+  let countrySimple: ICountry = {} as ICountry;
+  countrySimple.commonName = rawCountry.name.common;
+
+  if (rawCountry.cca3) {
+    countrySimple.iso3Code = rawCountry.cca3;
+  }
+  if (rawCountry.cca2) {
+    countrySimple.iso2Code = rawCountry.cca2;
+  }
+
+  //console.log(`!!simple country stringified:: ${JSON.stringify(countrySimple)}`);
+
+  return countrySimple;
 }

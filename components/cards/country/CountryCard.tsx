@@ -1,4 +1,4 @@
-import { Tooltip } from '@nextui-org/react';
+import { Popover, Text } from '@nextui-org/react';
 import { server } from '../../../config';
 import { ICountryData } from '../../../data/types';
 import { thousandsOfCommas, titleCasePlease } from '../../../utils/preops';
@@ -46,17 +46,15 @@ const CountryCard: React.FC<ICountryData> = ({
     : 'has no UN membership';
 
   return (
-    <div className="w-80 sm:w-128 text-sm">
-      <h2 className="font-medium leading-tight text-4xl mt-0 mb-2 text-blue-600">
-        {name}
-      </h2>
-      <p className="text-gray-700 text-base mt-4 mb-4">
+    <div className="my-page">
+      <h2 className="my-page-title">{name}</h2>
+      <p className="text-base mt-4 mb-4">
         <span className="">{officialName} </span>is{' '}
         <a
           href={googleMaps}
           target="_blank"
           rel="noreferrer"
-          className="text-gray-600 hover:text-blue-600 hover:underline"
+          className="my-link-underline"
         >
           a {landlockedState}country in {subregion ? subregion : region}
         </a>
@@ -76,11 +74,11 @@ const CountryCard: React.FC<ICountryData> = ({
               <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
                 Territory Wanderfacts
               </h2>
-              <div className="px-6 pt-4  pb-2 mb-5 bg-gradient-to-r from-slate-50 to-slate-50 shadow-sm rounded-tl-md rounded-tr-md rounded-bl-md rounded-br-md">
+              <div className="my-card">
                 <img
                   className="mb-3 w-20 h-auto rounded-sm shadow-sm"
                   src={flag}
-                  alt="flag__image"
+                  alt=""
                 />
                 <p>
                   Population{' '}
@@ -123,20 +121,17 @@ const CountryCard: React.FC<ICountryData> = ({
                 ) : (
                   <></>
                 )}{' '}
-                <p className="pb-4 text-sm">
-                  Languages spoken include{' '}
-                  {languages?.map((lang, idx) => (
-                    <span
-                      key={idx}
-                      className=" inline-block bg-purple-200 rounded-full px-3 py-1 text-xs font-semibold text-gray-700 mr-2 mb-2"
-                    >
-                      {lang.name}
-                    </span>
-                  ))}
-                </p>
+                <hr className="my-rule mt-4 mb-4 " />
+                <p className="mt-4 mb-4">Languages</p>
+                {languages?.map((lang, idx) => (
+                  <span key={idx} className=" my-popsicle">
+                    {lang.name}
+                  </span>
+                ))}
+                <p>&nbsp;</p>
               </div>
 
-              <div className="px-6 pt-4  pb-2 mb-5 bg-gradient-to-r from-slate-50 to-slate-50 shadow-sm rounded-tl-md rounded-tr-md rounded-bl-md rounded-br-md">
+              <div className="px-6 pt-4  pb-2 mb-5 bg-gradient-to-r from-slate-50 to-slate-50  dark:from-slate-800  dark:to-slate-800 shadow-sm rounded-tl-md rounded-tr-md rounded-bl-md rounded-br-md">
                 <p className="mt-4 mb-4 ">
                   Area{' '}
                   {population.total == 0
@@ -159,60 +154,50 @@ const CountryCard: React.FC<ICountryData> = ({
 
                 <p className="mt-4 mb-4 ">Top-Level Domain {tld}</p>
 
-                {timezones && timezones.length > 0 ? (
-                  <p className="text-sm">
-                    Timezones{' '}
-                    {timezones?.map((tz, idx) => (
-                      <span
-                        key={idx}
-                        className="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs font-semibold text-gray-700 mr-2 mb-2"
-                      >
-                        {tz}
-                      </span>
-                    ))}
-                  </p>
-                ) : (
-                  <></>
-                )}
+                <hr className="my-rule mt-4 mb-4 " />
 
-                {continents && continents.length > 0 ? (
-                  <p className="text-sm">
-                    Continents{' '}
-                    {continents?.map((continent, idx) => (
-                      <span
-                        key={idx}
-                        className="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs font-semibold text-gray-700 mr-2 mb-2"
-                      >
-                        {continent}
-                      </span>
-                    ))}
-                  </p>
-                ) : (
-                  <></>
-                )}
+                <p className="mt-4 mb-4">Timezones</p>
 
-                <hr className="mt-4 mb-4 " />
-
-                <p className="mt-4 mb-4 ">Translations</p>
-                {nativeNames?.map((item, idx) => (
-                  <Tooltip
-                    key={idx}
-                    content={`Officially: ${item.officialName}`}
-                    color="invert"
-                    placement="bottomStart"
-                  >
-                    <span className=" inline-block bg-gray-200 rounded-full px-3 py-1 text-xs font-semibold text-gray-700 mr-2 mb-2">
-                      {item.languageName}? Call it {item.commonName}
-                    </span>
-                  </Tooltip>
+                {timezones?.map((tz, idx) => (
+                  <span key={idx} className="my-popsicle">
+                    {tz}
+                  </span>
                 ))}
 
-                <hr className="mt-4 mb-4 " />
-                <p className="mt-4 mb-4 ">
+                <hr className="my-rule mt-4 mb-4 " />
+
+                <p className="mt-4 mb-4">Continents</p>
+
+                {continents?.map((continent, idx) => (
+                  <span key={idx} className="my-popsicle">
+                    {continent}
+                  </span>
+                ))}
+
+                <hr className="my-rule mt-4 mb-4 " />
+
+                <p className="mt-4 mb-4">Translations</p>
+                {nativeNames?.map((item, idx) => (
+                  <Popover key={idx} isBordered placement="top-left">
+                    <Popover.Trigger>
+                      <span className=" my-popsicle">
+                        {item.languageName}? Call it {item.commonName}
+                      </span>
+                    </Popover.Trigger>
+                    <Popover.Content>
+                      <Text
+                        css={{ p: '$10' }}
+                      >{`${item.languageName} \nOfficially: ${item.officialName}`}</Text>
+                    </Popover.Content>
+                  </Popover>
+                ))}
+
+                <hr className="my-rule mt-4 mb-4 " />
+                <p className="mt-4 mb-4">
                   {name} is {unitedNationMembershipState}
                 </p>
               </div>
-              <div className="px-6 pt-4  pb-2 mb-5 bg-gradient-to-r from-white-50 to-white-50 rounded-tl-md rounded-tr-md rounded-bl-md rounded-br-md">
+              <div className="px-6 pt-4">
                 <p className="mb-8">
                   <img
                     src={flag}
@@ -222,7 +207,7 @@ const CountryCard: React.FC<ICountryData> = ({
                 </p>
 
                 <div className="text-xs text-center">
-                  <hr className="mx-16" />
+                  <hr className="my-rule mx-16" />
                   <br />
                   <img
                     src={coatOfArms}
@@ -237,9 +222,7 @@ const CountryCard: React.FC<ICountryData> = ({
                     }
                     target="_blank"
                     rel="noreferrer"
-                    className={`text-gray-600 ${
-                      independent ? 'hover:text-blue-600' : 'hover:text-red-600'
-                    }`}
+                    className="my-link"
                   >
                     {independentState}
                   </a>

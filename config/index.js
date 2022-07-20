@@ -1,6 +1,7 @@
 export const isDevMode = process.env.NODE_ENV !== 'production';
 export const isStorybookMode = process.env.STORYBOOK === 'on'; //$ STORYBOOK=on yarn storybook
 export const isTestMode = process.env.NODE_ENV === 'test';
+export const loadFallbackData = true;
 
 // we want mocked data either on Storybook or tests
 export const isMockedEnvironment = isStorybookMode || isTestMode;

@@ -11,5 +11,5 @@ const About: NextPageWithLayout<INotFoundProps> = () => {
 export default About;
 
 About.getLayout = (page) => {
-  return <PrimaryLayout pageTitle="Not Found">{page}</PrimaryLayout>;
+  return <PrimaryLayout titleBar="Not Found">{page}</PrimaryLayout>;
 };

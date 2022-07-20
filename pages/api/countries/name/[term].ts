@@ -1,6 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { restCountriesApi } from '../../../../config';
+import { loadFallbackData, restCountriesApi } from '../../../../config';
 import { ICountryDataOrCustomData } from '../../../../data/types';
+import { simpleErrorPlease } from '../../../../utils/preops';
+
+import defaultCountriesRaw from '../../../../data/search-database-raw.json';
 
 interface IApiRequest extends NextApiRequest {}
 
@@ -10,7 +13,7 @@ export default function handler(
 ) {
   //todo: save thirdparty data in mongodb && db connect?
 
-  const capital = req.query.term as string;
+  const name = req.query.term as string;
 
   switch (req.method) {
     case 'GET':
@@ -20,22 +23,53 @@ export default function handler(
   }
 
   async function getCountriesByName() {
-    let countries;
-    const thirdPartyRes = await fetch(`${restCountriesApi}/name/${capital}`);
-    if (thirdPartyRes.status == 200) {
-      //**This is a search endpoint, so we expect a list */
-      countries = await thirdPartyRes.json();
-    }
+    let countries: any[] = [];
+    let url = `${restCountriesApi}/name/${name}`;
 
-    if (countries) {
-      return res.status(200).json({
-        message: 'all fields',
-        data: countries,
-      });
-    } else {
-      return res.status(404).json({
+    try {
+      const thirdPartyRes = await fetch(`${url}`);
+
+      countries = await thirdPartyRes.json();
+
+      if (thirdPartyRes.status == 200) {
+        return res.status(200).json({
+          message: 'all fields',
+          data: countries,
+        });
+      } else {
+        return res.status(thirdPartyRes.status).json({
+          success: false,
+          message: `Something bad happened`,
+        });
+      }
+    } catch (e) {
+      console.log(`Ayayai on getCountriesByName::${e}`);
+
+      if (loadFallbackData) {
+        //regexooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+        const searchPattern = new RegExp(name, 'i');
+
+        let filteredResults = defaultCountriesRaw.filter((result) => {
+          if (result.name) {
+            return (
+              searchPattern.test(result.name.common) ||
+              searchPattern.test(result.name.official)
+            );
+          }
+        });
+
+        //regexooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+        return res.status(200).json({
+          success: false,
+          message: `Something bad happened [status ${500}], default data loaded`,
+          data: filteredResults,
+        });
+      }
+
+      return res.status(500).json({
         success: false,
-        message: `Countries of name term ${capital} not found`,
+        message: `Server says urgh`,
+        verbose: `${simpleErrorPlease(e)}`,
       });
     }
   }

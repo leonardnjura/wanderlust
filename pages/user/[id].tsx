@@ -73,7 +73,7 @@ export default User;
 User.getLayout = (page) => {
   return (
     <PrimaryLayout
-      pageTitle={`${page.props['userDataApiResponse'].firstName ?? 'User'}`}
+      titleBar={`${page.props['userDataApiResponse'].firstName ?? 'User'}`}
     >
       {page}
     </PrimaryLayout>

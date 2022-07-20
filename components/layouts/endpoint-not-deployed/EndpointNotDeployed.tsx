@@ -9,10 +9,8 @@ const EndpointNotDeployed: React.FC<IEndpointNotDeployed> = ({
 }) => {
   return (
     <section className="f-width flex flex-row   items-center pt-24">
-      <h2 className="font-medium leading-tight text-4xl mt-0 mb-2 text-blue-600 border-r-2 pr-2">
-        id:
-      </h2>
-      <p className="pl-2">{customMessage}</p>
+      <h2 className="my-vrule">id:</h2>
+      <p className="my-vrule-text">{customMessage}</p>
     </section>
   );
 };

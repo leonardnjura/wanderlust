@@ -28,10 +28,10 @@ const Header: React.FC<IHeader> = ({ className, ...headerProps }) => {
         </Link>
 
         <Link href="/">
-          <a className="hover:underline hidden sm:inline">Home</a>
+          <a className="my-link-nav hidden sm:inline">Home</a>
         </Link>
         <Link href="/about">
-          <a className="hover:underline hidden sm:inline">About</a>
+          <a className="my-link-nav hidden sm:inline">About</a>
         </Link>
       </div>
 
@@ -41,7 +41,7 @@ const Header: React.FC<IHeader> = ({ className, ...headerProps }) => {
             <FontAwesomeIcon
               icon={faBorderNone}
               style={{ fontSize: 20 }}
-              className=" text-black hover:text-blue-700"
+              className="my-link-nav"
             />
           </a>
         </Link>

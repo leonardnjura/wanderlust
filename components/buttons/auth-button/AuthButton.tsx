@@ -9,7 +9,7 @@ const AuthButton: React.FC<IAuthButton> = ({ className, ...buttonProps }) => {
   return (
     <button
       onClick={authenticated ? logout : login}
-      className={`${className} border-1 p-2 px-4 sm:px-6 bg-black hover:bg-blue-700 rounded text-white w-28`}
+      className={`${className} my-btn w-28`}
       {...buttonProps}
     >
       {authenticated ? 'Sign Out' : 'Sign In'}

@@ -1,12 +1,5 @@
 import { Schema } from './my-schemas';
 
-/*ISearchData*/
-export interface ISearchData {
-  url: string;
-  title: string;
-  text: string;
-}
-
 export interface ICustomData {
   success?: boolean;
   message: string;
@@ -61,15 +54,15 @@ export interface ICountryData {
   altSpellings: string[];
   iso2Code: string;
   iso3Code: string;
-  numericCode: number;
-  callingCode: string;
-  tld: string;
-  capital: string;
-  subregion: string;
-  region: string;
+  numericCode: number | null;
+  callingCode: string | null;
+  tld: string | null;
+  capital: string | null;
+  subregion: string | null;
+  region: string | null;
   population: IPopulation;
-  latlng: string[];
-  capitalLatLng: string[];
+  latlng: number[];
+  capitalLatLng: number[];
   area: number;
   googleMaps: string;
   ginis: IGini[];
@@ -82,7 +75,7 @@ export interface ICountryData {
   currencies: ICurrency[];
   languages: ILanguage[];
   startOfWeek: string;
-  drivingSide: string;
+  drivingSide: string | null;
   postalCode: IPostalCode;
   independent: boolean;
   landlocked: boolean;
@@ -90,8 +83,9 @@ export interface ICountryData {
 }
 
 export interface ICountry {
-  iso3Code: string;
   commonName: string;
+  iso2Code?: string;
+  iso3Code: string;
 }
 
 /*Others*/
@@ -120,7 +114,7 @@ export interface ILocationData {
 export interface ICurrency {
   code: string;
   name: string;
-  symbol: string;
+  symbol?: string | null;
 }
 
 export interface ILanguage {
@@ -154,11 +148,10 @@ export interface IPopulation {
 }
 
 export interface IPostalCode {
-  format: string;
-  regex: string;
+  format?: string;
+  regex?: string;
 }
 
-export type ISearchDataOrCustomData = ISearchData[] | ISearchData | ICustomData;
 export type IUserDataOrCustomData = IUserData[] | IUserData | ICustomData;
 export type ILocationDataOrCustomData =
   | ILocationData[]

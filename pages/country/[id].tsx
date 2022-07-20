@@ -3,10 +3,12 @@ import { ParsedUrlQuery } from 'querystring';
 import CountryCard from '../../components/cards/country/CountryCard';
 import NotFound from '../../components/layouts/not-found/NotFound';
 import PrimaryLayout from '../../components/layouts/primary/PrimaryLayout';
-import { ICountryData } from '../../data/types';
+import { ICountry, ICountryData, ILanguage } from '../../data/types';
 import {
   loadCountries,
   loadOneCountry,
+  loadWorldCountries,
+  loadWorldLanguages,
   prepareExternalApiCountry,
 } from '../../lib/get-countries';
 import { NextPageWithLayout } from '../page';
@@ -56,14 +58,23 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
   let preparedItems: ICountryData[] = [];
   const rawItems = await loadCountries();
 
+  //^^^^^^^^^^^run once preferred for if we gonna loop such helpers^^^^^^^^^^^^^^^^^^^^^^^
+  const worldCountries: ICountry[] = await loadWorldCountries();
+  const worldLanguages: ILanguage[] = await loadWorldLanguages();
+  //^^^^^^^^^^^run once preferred for if we gonna loop such helpers^^^^^^^^^^^^^^^^^^^^^^^
+
   for (let i = 0; i < rawItems.length; i++) {
     let rawCountry = rawItems[i];
-    let preparedCountry = await prepareExternalApiCountry(rawCountry);
+    let preparedCountry = await prepareExternalApiCountry(
+      rawCountry,
+      worldCountries,
+      worldLanguages
+    );
 
     if (preparedCountry != null) {
       preparedItems.push(preparedCountry);
       console.log(
-        `#${i}. \n!!getStaticPaths traversing ${
+        `#${i}. \n!!getStaticPaths traversing== ${
           preparedCountry.iso2Code
         }:: ${JSON.stringify(preparedCountry)}\n`
       );
@@ -97,7 +108,7 @@ export default Country;
 Country.getLayout = (page) => {
   return (
     <PrimaryLayout
-      pageTitle={`${page.props['countryDataApiResponse'].name ?? 'Country'}`}
+      titleBar={`${page.props['countryDataApiResponse'].name ?? 'Country'}`}
     >
       {page}
     </PrimaryLayout>

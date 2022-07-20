@@ -3,8 +3,92 @@
 @tailwind utilities;
 
 @layer components {
-  .btn-primary {
-    @apply border-0 p-2 px-6 bg-slate-100 hover:bg-slate-200 rounded-md;
+  .my-btn {
+    @apply p-2 px-4 sm:px-6 bg-slate-900 dark:bg-slate-700 hover:bg-blue-700 rounded text-white focus:ring-4 focus:outline-none focus:ring-slate-600;
+  }
+}
+
+@layer components {
+  .my-link-nav {
+    @apply text-slate-900 dark:text-slate-600 hover:text-blue-700;
+  }
+}
+
+@layer components {
+  .my-link {
+    @apply text-gray-900 dark:text-gray-600 hover:text-blue-700;
+  }
+}
+
+@layer components {
+  .my-link-underline {
+    @apply text-gray-900 dark:text-gray-600 hover:text-blue-700 hover:underline;
+  }
+}
+
+@layer components {
+  .my-page {
+    @apply flex flex-col items-start gap-y-5 w-80 sm:w-128 my-text;
+  }
+}
+
+@layer components {
+  .my-text {
+    @apply text-gray-900 dark:text-gray-500 text-xs sm:text-sm;
+  }
+}
+
+@layer components {
+  .my-text-high-contrast {
+    @apply text-gray-900 dark:text-white text-xs sm:text-sm;
+  }
+}
+
+@layer components {
+  .my-text-high-contrast-lg {
+    @apply text-gray-900 dark:text-white text-xl sm:text-2xl;
+  }
+}
+
+@layer components {
+  .my-page-title {
+    @apply font-medium leading-tight text-4xl mt-0 mb-2 text-blue-600;
+  }
+}
+
+@layer components {
+  .my-link-hot {
+    @apply text-gray-900 dark:text-gray-700 hover:text-red-700;
+  }
+}
+
+@layer components {
+  .my-rule {
+    @apply border-t-gray-200 dark:border-t-gray-700;
+  }
+}
+
+@layer components {
+  .my-vrule {
+    @apply my-page-title border-r-2 pr-2 border-gray-200 dark:border-gray-700;
+  }
+}
+
+@layer components {
+  .my-vrule-text {
+    @apply my-page text-base pl-2;
+  }
+}
+
+@layer components {
+  .my-popsicle {
+    @apply inline-block bg-gray-200 dark:bg-gray-600 rounded-full px-3 py-1 text-xs font-semibold text-gray-700 dark:text-gray-900 mr-2 mb-2;
+  }
+}
+
+@layer components {
+  .my-card {
+    @apply px-6 pt-4  pb-2 mb-5 bg-gradient-to-r from-slate-50  to-slate-50  dark:from-slate-800  dark:to-slate-800 shadow-sm rounded-tl-md rounded-tr-md rounded-bl-md rounded-br-md;
   }
 }
 

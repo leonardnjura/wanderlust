@@ -2,7 +2,7 @@ import { IPrimaryLayout } from './PrimaryLayout';
 
 const base: IPrimaryLayout = {
   children: '{{insert a component inside me}}',
-  pageTitle: 'Page Title',
+  titleBar: 'Page Title',
 };
 
 export const mockPrimaryLayoutProps = {

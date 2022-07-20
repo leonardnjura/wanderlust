@@ -1,32 +1,62 @@
 import Link from 'next/link';
-import { ISearchData } from '../../../data/types';
+import { ICountryData } from '../../../data/types';
 
-export type ISearchResult = ISearchData & React.ComponentPropsWithoutRef<'div'>;
+export type ISearchResult = ICountryData &
+  React.ComponentPropsWithoutRef<'div'>;
 
 const SearchResult: React.FC<ISearchResult> = ({
-  url,
-  title,
-  text,
+  name,
+  officialName,
+  nativeNames,
+  altSpellings,
+  iso2Code,
+  iso3Code,
+  numericCode,
+  callingCode,
+  tld,
+  capital,
+  subregion,
+  region,
+  population,
+  latlng,
+  capitalLatLng,
+  area,
+  googleMaps,
+  ginis,
+  demonyms,
+  timezones,
+  continents,
+  borders,
+  flag,
+  coatOfArms,
+  currencies,
+  languages,
+  startOfWeek,
+  drivingSide,
+  postalCode,
+  independent,
+  landlocked,
+  unMember,
+  //compo==↓
   className,
   ...divProps
 }) => {
   return (
-    <div
-      {...divProps}
-      className={`flex flex-col w-5/6 max-w-screen-md space-y-1 ${className}`}
-    >
-      <Link href={url}>
+    <div {...divProps} className={`my-page ${className}`}>
+      <Link href={googleMaps}>
         <a
           className="cursor:pointer hover:underline"
           target="_blank"
           rel="noopener noreferrer"
         >
-          <p>{url}</p>
-          <p className="text-blue-600 text-xl">{title}</p>
+          <p>{googleMaps}</p>
+          <p className="text-blue-600 text-xl">{officialName}</p>
         </a>
       </Link>
 
-      <p>{text}</p>
+      <p className="pb-8">
+        <a href={`/country/${iso3Code}`}>{name}</a>
+      </p>
     </div>
   );
 };
